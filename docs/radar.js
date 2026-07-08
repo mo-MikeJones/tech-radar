@@ -28,7 +28,7 @@ function radar_visualization(config) {
   config.height = config.height || 1000;
   config.colors = ("colors" in config) ? config.colors : {
       background: "#fff",
-      grid: '#dddde0',
+      grid: '#9ca3af',
       inactive: "#ddd"
     };
   config.print_layout = ("print_layout" in config) ? config.print_layout : true;
@@ -225,18 +225,6 @@ function radar_visualization(config) {
   // define default font-family
   config.font_family = config.font_family || "Arial, Helvetica";
 
-  // draw grid lines
-  grid.append("line")
-    .attr("x1", 0).attr("y1", -400)
-    .attr("x2", 0).attr("y2", 400)
-    .style("stroke", config.colors.grid)
-    .style("stroke-width", 1);
-  grid.append("line")
-    .attr("x1", -400).attr("y1", 0)
-    .attr("x2", 400).attr("y2", 0)
-    .style("stroke", config.colors.grid)
-    .style("stroke-width", 1);
-
   // background color. Usage `.attr("filter", "url(#solid)")`
   // SOURCE: https://stackoverflow.com/a/31013492/2609980
   var defs = grid.append("defs");
@@ -251,6 +239,16 @@ function radar_visualization(config) {
   filter.append("feComposite")
     .attr("in", "SourceGraphic");
 
+  // draw ring band fills (alternating shades, largest first so smaller sit on top)
+  var ringBandColors = ['#f4f5f7', '#ebedf0'];
+  for (var i = rings.length - 1; i >= 0; i--) {
+    grid.append("circle")
+      .attr("cx", 0)
+      .attr("cy", 0)
+      .attr("r", rings[i].radius)
+      .style("fill", ringBandColors[i % 2]);
+  }
+
   // draw rings
   for (var i = 0; i < rings.length; i++) {
     grid.append("circle")
@@ -259,7 +257,7 @@ function radar_visualization(config) {
       .attr("r", rings[i].radius)
       .style("fill", "none")
       .style("stroke", config.colors.grid)
-      .style("stroke-width", 1);
+      .style("stroke-width", 2);
     if (config.print_layout) {
       grid.append("text")
         .text(config.rings[i].name)
@@ -274,6 +272,19 @@ function radar_visualization(config) {
         .style("user-select", "none");
     }
   }
+
+  // draw quadrant dividing lines on top of ring fills
+  var outerRadius = rings[rings.length - 1].radius;
+  grid.append("line")
+    .attr("x1", 0).attr("y1", -outerRadius)
+    .attr("x2", 0).attr("y2", outerRadius)
+    .style("stroke", config.colors.grid)
+    .style("stroke-width", 3);
+  grid.append("line")
+    .attr("x1", -outerRadius).attr("y1", 0)
+    .attr("x2", outerRadius).attr("y2", 0)
+    .style("stroke", config.colors.grid)
+    .style("stroke-width", 3);
 
   function legend_transform(quadrant, ring, legendColumnWidth, index=null, previousHeight = null) {
     const dx = ring < 2 ? 0 : legendColumnWidth;
