@@ -19,29 +19,64 @@
 <svg id="radar"></svg>
 
 <script>
-fetch('./config.json').then(function(response) {
-  return response.json();
-}).then(function(data) {
+function parseFrontmatter(text) {
+  var match = text.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+  if (!match) return null;
+  var entry = {};
+  match[1].split(/\r?\n/).forEach(function(line) {
+    var colon = line.indexOf(': ');
+    if (colon === -1) return;
+    var key = line.slice(0, colon).trim();
+    var value = line.slice(colon + 2).trim();
+    if (key === 'ring') {
+      var ringIndex = { LIVE: 0, BETA: 1, ALPHA: 2, DISCOVER: 3, RETIRED: 4 };
+      entry[key] = value in ringIndex ? ringIndex[value] : parseInt(value, 10);
+    } else if (key === 'moved') {
+      entry[key] = parseInt(value, 10);
+    } else if (key === 'active') {
+      entry[key] = value === 'true';
+    } else {
+      entry[key] = value;
+    }
+  });
+  return entry;
+}
+
+async function loadRadar() {
+  var config = await fetch('./config.json').then(function(r) { return r.json(); });
+
+  var allEntries = [];
+  await Promise.all(config.quadrants.map(async function(quadrant, index) {
+    var manifest = await fetch('./quadrants/' + quadrant.folder + '/index.json')
+      .then(function(r) { return r.json(); });
+    var entries = await Promise.all(manifest.map(async function(filename) {
+      var text = await fetch('./quadrants/' + quadrant.folder + '/' + filename)
+        .then(function(r) { return r.text(); });
+      var entry = parseFrontmatter(text);
+      if (entry) entry.quadrant = index;
+      return entry;
+    }));
+    entries.forEach(function(e) { if (e) allEntries.push(e); });
+  }));
+
   radar_visualization({
     repo_url: "https://github.com/zalando/tech-radar",
     title: "Zalando Tech Radar",
-    date: data.date,
-    quadrants: [
-      { name: "Languages" },
-      { name: "Infrastructure" },
-      { name: "Datastores" },
-      { name: "Data Management" },
-    ],
+    date: config.date,
+    quadrants: config.quadrants.map(function(q) { return { name: q.name }; }),
     rings: [
-      { name: "ADOPT", color: "#5ba300" },
-      { name: "TRIAL", color: "#009eb0" },
-      { name: "ASSESS", color: "#c7ba00" },
-      { name: "HOLD", color: "#e09b96" }
+      { name: "LIVE",     color: "#5ba300" },
+      { name: "BETA",     color: "#009eb0" },
+      { name: "ALPHA",    color: "#c7ba00" },
+      { name: "DISCOVER", color: "#e07d10" },
+      { name: "RETIRED",  color: "#e09b96" }
     ],
-    entries: data.entries
+    entries: allEntries
   });
-}).catch(function(err) {
-  console.log('Error loading config.json', err);
+}
+
+loadRadar().catch(function(err) {
+  console.log('Error loading radar data', err);
 });
 </script>
 

@@ -71,9 +71,10 @@ function radar_visualization(config) {
   ];
 
   const rings = [
-    { radius: 130 },
-    { radius: 220 },
-    { radius: 310 },
+    { radius: 80 },
+    { radius: 160 },
+    { radius: 240 },
+    { radius: 320 },
     { radius: 400 }
   ];
 
@@ -127,8 +128,8 @@ function radar_visualization(config) {
       y: 15 * quadrants[quadrant].factor_y
     };
     var cartesian_max = {
-      x: rings[3].radius * quadrants[quadrant].factor_x,
-      y: rings[3].radius * quadrants[quadrant].factor_y
+      x: rings[4].radius * quadrants[quadrant].factor_x,
+      y: rings[4].radius * quadrants[quadrant].factor_y
     };
     return {
       clipx: function(d) {
@@ -164,10 +165,11 @@ function radar_visualization(config) {
   }
 
   // partition entries according to segments
+  var numRings = config.rings.length;
   var segmented = new Array(4);
   for (let quadrant = 0; quadrant < 4; quadrant++) {
-    segmented[quadrant] = new Array(4);
-    for (var ring = 0; ring < 4; ring++) {
+    segmented[quadrant] = new Array(numRings);
+    for (var ring = 0; ring < numRings; ring++) {
       segmented[quadrant][ring] = [];
     }
   }
@@ -179,7 +181,7 @@ function radar_visualization(config) {
   // assign unique sequential id to each entry
   var id = 1;
   for (quadrant of [2,3,1,0]) {
-    for (var ring = 0; ring < 4; ring++) {
+    for (var ring = 0; ring < numRings; ring++) {
       var entries = segmented[quadrant][ring];
       entries.sort(function(a,b) { return a.label.localeCompare(b.label); })
       for (var i=0; i<entries.length; i++) {
@@ -330,7 +332,7 @@ function radar_visualization(config) {
         .style("font-size", "18px")
         .style("font-weight", "bold");
       let previousLegendHeight = 0
-      for (let ring = 0; ring < 4; ring++) {
+      for (let ring = 0; ring < numRings; ring++) {
         if (ring % 2 === 0) {
           previousLegendHeight = 0
         }
