@@ -331,10 +331,10 @@ function radar_visualization(config) {
       .style("font-size", "12px");
 
     // legend
-    // Splits rings evenly into 2 columns; tracks per-column cumulative height
-    // using getBBox() after each render so wrapped labels never overlap.
+    // Single column per quadrant, rendered in order: DISCOVER, ALPHA, BETA, LIVE, RETIRED.
+    // Heights are tracked cumulatively via getBBox() so wrapped labels never overlap.
     const legend = radar.append("g");
-    var halfRings = Math.ceil(numRings / 2);
+    var legendRingOrder = [3, 2, 1, 0, 4]; // DISCOVER, ALPHA, BETA, LIVE, RETIRED
     for (let quadrant = 0; quadrant < 4; quadrant++) {
       legend.append("text")
         .attr("transform", translate(
@@ -345,25 +345,24 @@ function radar_visualization(config) {
         .style("font-family", config.font_family)
         .style("font-size", "18px")
         .style("font-weight", "bold");
-      var colHeight = [0, 0];
-      for (let ring = 0; ring < numRings; ring++) {
-        var col = ring >= halfRings ? 1 : 0;
-        var legendX = config.legend_offset[quadrant].x + col * config.legend_column_width;
+      var colHeight = 0;
+      legendRingOrder.forEach(function(ring) {
+        var legendX = config.legend_offset[quadrant].x;
         var legendBaseY = config.legend_offset[quadrant].y;
         var ringHeading = legend.append("text")
-          .attr("transform", translate(legendX, legendBaseY + colHeight[col]))
+          .attr("transform", translate(legendX, legendBaseY + colHeight))
           .text(config.rings[ring].name)
           .style("font-family", config.font_family)
           .style("font-size", "12px")
           .style("font-weight", "bold")
           .style("fill", config.rings[ring].color);
-        colHeight[col] += ringHeading.node().getBBox().height + 4;
+        colHeight += ringHeading.node().getBBox().height + 4;
         segmented[quadrant][ring].forEach(function(d) {
           var entry = legend.append("a")
             .attr("href", d.link ? d.link : "#")
             .attr("target", (d.link && config.links_in_new_tabs) ? "_blank" : null);
           var entryText = entry.append("text")
-            .attr("transform", translate(legendX, legendBaseY + colHeight[col]))
+            .attr("transform", translate(legendX, legendBaseY + colHeight))
             .attr("class", "legend" + quadrant + ring)
             .attr("id", "legendItem" + d.id)
             .text(d.id + ". " + d.label)
@@ -372,10 +371,10 @@ function radar_visualization(config) {
             .on("mouseover", function() { showBubble(d); highlightLegendItem(d); })
             .on("mouseout", function() { hideBubble(d); unhighlightLegendItem(d); })
             .call(wrap_text);
-          colHeight[col] += entryText.node().getBBox().height + 2;
+          colHeight += entryText.node().getBBox().height + 2;
         });
-        colHeight[col] += 8;
-      }
+        colHeight += 8;
+      });
     }
   }
 
