@@ -44,7 +44,7 @@ function radar_visualization(config) {
   config.title_offset = config.title_offset || { x: -675, y: -420 };
   config.footer_offset = config.footer_offset || { x: -155, y: 450 };
   config.legend_column_width = config.legend_column_width || 140
-  config.legend_line_height = config.legend_line_height || 10
+  config.legend_line_height = config.legend_line_height || 13
 
   // custom random number generator, to make random sequence reproducible
   // source: https://stackoverflow.com/questions/521295
@@ -331,7 +331,10 @@ function radar_visualization(config) {
       .style("font-size", "12px");
 
     // legend
+    // Splits rings evenly into 2 columns; tracks per-column cumulative height
+    // using getBBox() after each render so wrapped labels never overlap.
     const legend = radar.append("g");
+    var halfRings = Math.ceil(numRings / 2);
     for (let quadrant = 0; quadrant < 4; quadrant++) {
       legend.append("text")
         .attr("transform", translate(
@@ -342,42 +345,36 @@ function radar_visualization(config) {
         .style("font-family", config.font_family)
         .style("font-size", "18px")
         .style("font-weight", "bold");
-      let previousLegendHeight = 0
+      var colHeight = [0, 0];
       for (let ring = 0; ring < numRings; ring++) {
-        if (ring % 2 === 0) {
-          previousLegendHeight = 0
-        }
-        legend.append("text")
-          .attr("transform", legend_transform(quadrant, ring, config.legend_column_width, null, previousLegendHeight))
+        var col = ring >= halfRings ? 1 : 0;
+        var legendX = config.legend_offset[quadrant].x + col * config.legend_column_width;
+        var legendBaseY = config.legend_offset[quadrant].y;
+        var ringHeading = legend.append("text")
+          .attr("transform", translate(legendX, legendBaseY + colHeight[col]))
           .text(config.rings[ring].name)
           .style("font-family", config.font_family)
           .style("font-size", "12px")
           .style("font-weight", "bold")
           .style("fill", config.rings[ring].color);
-        legend.selectAll(".legend" + quadrant + ring)
-          .data(segmented[quadrant][ring])
-          .enter()
-            .append("a")
-              .attr("href", function (d, i) {
-                 return d.link ? d.link : "#"; // stay on same page if no link was provided
-              })
-              // Add a target if (and only if) there is a link and we want new tabs
-              .attr("target", function (d, i) {
-                 return (d.link && config.links_in_new_tabs) ? "_blank" : null;
-              })
-            .append("text")
-              .attr("transform", function(d, i) { return legend_transform(quadrant, ring, config.legend_column_width, i, previousLegendHeight); })
-              .attr("class", "legend" + quadrant + ring)
-              .attr("id", function(d, i) { return "legendItem" + d.id; })
-              .text(function(d) { return d.id + ". " + d.label; })
-              .style("font-family", config.font_family)
-              .style("font-size", "11px")
-              .on("mouseover", function(event, d) { showBubble(d); highlightLegendItem(d); })
-              .on("mouseout", function(event, d) { hideBubble(d); unhighlightLegendItem(d); })
-              .call(wrap_text)
-              .each(function() {
-                previousLegendHeight += d3.select(this).node().getBBox().height;
-              });
+        colHeight[col] += ringHeading.node().getBBox().height + 4;
+        segmented[quadrant][ring].forEach(function(d) {
+          var entry = legend.append("a")
+            .attr("href", d.link ? d.link : "#")
+            .attr("target", (d.link && config.links_in_new_tabs) ? "_blank" : null);
+          var entryText = entry.append("text")
+            .attr("transform", translate(legendX, legendBaseY + colHeight[col]))
+            .attr("class", "legend" + quadrant + ring)
+            .attr("id", "legendItem" + d.id)
+            .text(d.id + ". " + d.label)
+            .style("font-family", config.font_family)
+            .style("font-size", "11px")
+            .on("mouseover", function() { showBubble(d); highlightLegendItem(d); })
+            .on("mouseout", function() { hideBubble(d); unhighlightLegendItem(d); })
+            .call(wrap_text);
+          colHeight[col] += entryText.node().getBBox().height + 2;
+        });
+        colHeight[col] += 8;
       }
     }
   }
