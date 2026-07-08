@@ -360,7 +360,11 @@ function radar_visualization(config) {
         segmented[quadrant][ring].forEach(function(d) {
           var entry = legend.append("a")
             .attr("href", d.link ? d.link : "#")
-            .attr("target", (d.link && config.links_in_new_tabs) ? "_blank" : null);
+            .attr("target", (d.link && config.links_in_new_tabs) ? "_blank" : null)
+            .style("cursor", "pointer")
+            .on("click", function(event) {
+              if (config.onClick) { event.preventDefault(); config.onClick(d); }
+            });
           var entryText = entry.append("text")
             .attr("transform", translate(legendX, legendBaseY + colHeight))
             .attr("class", "legend" + quadrant + ring)
@@ -491,7 +495,9 @@ function radar_visualization(config) {
         .attr("class", "blip")
         .attr("transform", function(d, i) { return legend_transform(d.quadrant, d.ring, config.legend_column_width, i); })
         .on("mouseover", function(event, d) { showBubble(d); highlightLegendItem(d); })
-        .on("mouseout", function(event, d) { hideBubble(d); unhighlightLegendItem(d); });
+        .on("mouseout", function(event, d) { hideBubble(d); unhighlightLegendItem(d); })
+        .on("click", function(event, d) { if (config.onClick) config.onClick(d); })
+        .style("cursor", "pointer");
 
   // configure each blip
   blips.each(function(d) {

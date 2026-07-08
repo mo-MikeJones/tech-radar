@@ -12,15 +12,28 @@
 <script src="radar.js"></script>
 
 <link rel="stylesheet" href="radar.css">
+<style>
+#entry-popup-close:hover { color: #333; }
+#entry-popup-sections a:hover { text-decoration: underline; }
+</style>
 </head>
 
 <body>
 
 <svg id="radar"></svg>
 
+<div id="entry-popup" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.55);">
+  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border-radius:10px;padding:28px 32px;max-width:600px;width:calc(100% - 40px);max-height:85vh;overflow-y:auto;box-shadow:0 8px 40px rgba(0,0,0,0.25);font-family:Arial,Helvetica,sans-serif;">
+    <button id="entry-popup-close" style="position:absolute;top:14px;right:18px;background:none;border:none;font-size:22px;line-height:1;cursor:pointer;color:#999;padding:0;">&#x2715;</button>
+    <div id="entry-popup-badge" style="display:inline-block;border-radius:4px;padding:3px 10px;font-size:11px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:#fff;margin-bottom:10px;"></div>
+    <h2 id="entry-popup-title" style="margin:0 0 18px;font-size:20px;padding-right:30px;color:#111;"></h2>
+    <div id="entry-popup-sections"></div>
+  </div>
+</div>
+
 <script>
 function parseFrontmatter(text) {
-  var match = text.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+  var match = text.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/);
   if (!match) return null;
   var entry = {};
   match[1].split(/\r?\n/).forEach(function(line) {
@@ -39,6 +52,24 @@ function parseFrontmatter(text) {
       entry[key] = value;
     }
   });
+  var body = (match[2] || '').trim();
+  if (body) {
+    var sections = {};
+    var sectionKey = null;
+    var sectionLines = [];
+    body.split(/\r?\n/).forEach(function(line) {
+      var h = line.match(/^##\s+(.+)/);
+      if (h) {
+        if (sectionKey) sections[sectionKey] = sectionLines.join('\n').trim();
+        sectionKey = h[1].trim();
+        sectionLines = [];
+      } else if (sectionKey) {
+        sectionLines.push(line);
+      }
+    });
+    if (sectionKey) sections[sectionKey] = sectionLines.join('\n').trim();
+    if (Object.keys(sections).length) entry.sections = sections;
+  }
   return entry;
 }
 
@@ -71,9 +102,63 @@ async function loadRadar() {
       { name: "DISCOVER", color: "#e07d10" },
       { name: "RETIRED",  color: "#e09b96" }
     ],
-    entries: allEntries
+    entries: allEntries,
+    onClick: showEntryPopup
   });
 }
+
+var RING_NAMES  = ['LIVE', 'BETA', 'ALPHA', 'DISCOVER', 'RETIRED'];
+var RING_COLORS = ['#5ba300', '#009eb0', '#c7ba00', '#e07d10', '#e09b96'];
+var POPUP_SECTIONS = ['Summary', "Why we're interested", 'Current status',
+  'Evidence & feedback', 'Known risks / concerns', 'Recommended audience',
+  'Next steps', 'Owner'];
+
+function showEntryPopup(d) {
+  document.getElementById('entry-popup-title').textContent = d.label;
+  var badge = document.getElementById('entry-popup-badge');
+  badge.textContent = RING_NAMES[d.ring] || '';
+  badge.style.background = RING_COLORS[d.ring] || '#999';
+  var el = document.getElementById('entry-popup-sections');
+  el.innerHTML = '';
+  if (d.sections) {
+    POPUP_SECTIONS.forEach(function(key) {
+      var val = d.sections[key];
+      if (!val) return;
+      var lbl = document.createElement('p');
+      lbl.style.cssText = 'margin:14px 0 3px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:#888;';
+      lbl.textContent = key;
+      var content = document.createElement('p');
+      content.style.cssText = 'margin:0;font-size:14px;color:#333;line-height:1.6;';
+      content.textContent = val;
+      el.appendChild(lbl);
+      el.appendChild(content);
+    });
+  }
+  if (!el.children.length) {
+    var msg = document.createElement('p');
+    msg.style.color = '#999';
+    msg.textContent = 'No additional information available for this entry.';
+    el.appendChild(msg);
+  }
+  if (d.link) {
+    var a = document.createElement('a');
+    a.href = d.link; a.target = '_blank'; a.rel = 'noopener noreferrer';
+    a.textContent = 'Learn more \u2192';
+    a.style.cssText = 'display:inline-block;margin-top:16px;font-size:13px;color:#0070f3;';
+    el.appendChild(a);
+  }
+  document.getElementById('entry-popup').style.display = 'block';
+}
+
+document.getElementById('entry-popup').addEventListener('click', function(e) {
+  if (e.target === this) this.style.display = 'none';
+});
+document.getElementById('entry-popup-close').addEventListener('click', function() {
+  document.getElementById('entry-popup').style.display = 'none';
+});
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') document.getElementById('entry-popup').style.display = 'none';
+});
 
 loadRadar().catch(function(err) {
   console.log('Error loading radar data', err);
