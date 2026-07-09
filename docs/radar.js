@@ -336,26 +336,36 @@ function radar_visualization(config) {
     const legend = radar.append("g");
     var legendRingOrder = [3, 2, 1, 0, 4]; // DISCOVER, ALPHA, BETA, LIVE, RETIRED
     for (let quadrant = 0; quadrant < 4; quadrant++) {
-      legend.append("text")
-        .attr("transform", translate(
-          config.legend_offset[quadrant].x,
-          config.legend_offset[quadrant].y - 45
-        ))
+      // GDS H2-style quadrant heading with blue underline bar
+      var qHeadingX = config.legend_offset[quadrant].x;
+      var qHeadingY = config.legend_offset[quadrant].y - 45;
+      var qHeading = legend.append("text")
+        .attr("transform", translate(qHeadingX, qHeadingY))
         .text(config.quadrants[quadrant].name)
         .style("font-family", config.font_family)
-        .style("font-size", "18px")
-        .style("font-weight", "bold");
+        .style("font-size", "22px")
+        .style("font-weight", "bold")
+        .style("fill", "#0b0c0c");
+      var qBBox = qHeading.node().getBBox();
+      legend.append("line")
+        .attr("x1", qHeadingX)
+        .attr("y1", qHeadingY + 6)
+        .attr("x2", qHeadingX + qBBox.width)
+        .attr("y2", qHeadingY + 6)
+        .style("stroke", "#1d70b8")
+        .style("stroke-width", 4);
       var colHeight = 0;
       legendRingOrder.forEach(function(ring) {
         var legendX = config.legend_offset[quadrant].x;
         var legendBaseY = config.legend_offset[quadrant].y;
+        // GDS H3-style ring heading: black, no ring colour
         var ringHeading = legend.append("text")
           .attr("transform", translate(legendX, legendBaseY + colHeight))
           .text(config.rings[ring].name)
           .style("font-family", config.font_family)
-          .style("font-size", "12px")
+          .style("font-size", "14px")
           .style("font-weight", "bold")
-          .style("fill", config.rings[ring].color);
+          .style("fill", "#0b0c0c");
         colHeight += ringHeading.node().getBBox().height + 4;
         segmented[quadrant][ring].forEach(function(d) {
           var entry = legend.append("a")
@@ -365,13 +375,16 @@ function radar_visualization(config) {
             .on("click", function(event) {
               if (config.onClick) { event.preventDefault(); config.onClick(d); }
             });
+          // GDS link style: blue, underlined
           var entryText = entry.append("text")
             .attr("transform", translate(legendX, legendBaseY + colHeight))
             .attr("class", "legend" + quadrant + ring)
             .attr("id", "legendItem" + d.id)
+            .attr("fill", "#1d70b8")
             .text(d.id + ". " + d.label)
             .style("font-family", config.font_family)
-            .style("font-size", "11px")
+            .style("font-size", "12px")
+            .style("text-decoration", "underline")
             .on("mouseover", function() { showBubble(d); highlightLegendItem(d); })
             .on("mouseout", function() { hideBubble(d); unhighlightLegendItem(d); })
             .call(wrap_text);
@@ -476,15 +489,14 @@ function radar_visualization(config) {
   }
 
   function highlightLegendItem(d) {
+    // GDS hover: thicker underline only, text colour unchanged
     var legendItem = document.getElementById("legendItem" + d.id);
-    legendItem.setAttribute("filter", "url(#solid)");
-    legendItem.setAttribute("fill", "white");
+    legendItem.style.textDecorationThickness = "3px";
   }
 
   function unhighlightLegendItem(d) {
     var legendItem = document.getElementById("legendItem" + d.id);
-    legendItem.removeAttribute("filter");
-    legendItem.removeAttribute("fill");
+    legendItem.style.textDecorationThickness = "";
   }
 
   // draw blips on radar

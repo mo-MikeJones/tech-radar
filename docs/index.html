@@ -20,13 +20,29 @@
 
 <body>
 
+<header class="govuk-header">
+  <div class="govuk-header__container">
+    <span class="govuk-header__logotype">&#x2022;</span>
+    <a href="#" class="govuk-header__title">AI4Dev Radar</a>
+  </div>
+</header>
+
+<div class="govuk-phase-banner">
+  <div class="govuk-phase-banner__content">
+    <span class="govuk-phase-banner__tag">Alpha</span>
+    This is a new service &mdash; your <a href="#">feedback</a> will help us improve it.
+  </div>
+</div>
+
+<div class="govuk-main-wrapper">
+
 <svg id="radar"></svg>
 
-<div id="entry-popup" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.55);">
-  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border-radius:10px;padding:28px 32px;max-width:600px;width:calc(100% - 40px);max-height:85vh;overflow-y:auto;box-shadow:0 8px 40px rgba(0,0,0,0.25);font-family:Arial,Helvetica,sans-serif;">
-    <button id="entry-popup-close" style="position:absolute;top:14px;right:18px;background:none;border:none;font-size:22px;line-height:1;cursor:pointer;color:#999;padding:0;">&#x2715;</button>
-    <div id="entry-popup-badge" style="display:inline-block;border-radius:4px;padding:3px 10px;font-size:11px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:#fff;margin-bottom:10px;"></div>
-    <h2 id="entry-popup-title" style="margin:0 0 18px;font-size:20px;padding-right:30px;color:#111;"></h2>
+<div id="entry-popup" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(11,12,12,0.6);">
+  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border-radius:0;border-top:10px solid #1d70b8;padding:30px 32px;max-width:640px;width:calc(100% - 40px);max-height:85vh;overflow-y:auto;box-shadow:0 4px 24px rgba(0,0,0,0.3);font-family:'GDS Transport','Source Sans Pro',arial,helvetica,sans-serif;">
+    <button id="entry-popup-close" style="position:absolute;top:16px;right:20px;background:none;border:none;font-size:24px;line-height:1;cursor:pointer;color:#505a5f;padding:0;font-weight:700;">&#x2715;</button>
+    <div id="entry-popup-badge" style="display:inline-block;padding:4px 10px;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#fff;margin-bottom:12px;"></div>
+    <h2 id="entry-popup-title" style="margin:0 0 20px;font-size:24px;font-weight:700;padding-right:30px;color:#0b0c0c;line-height:1.25;"></h2>
     <div id="entry-popup-sections"></div>
   </div>
 </div>
@@ -125,10 +141,10 @@ function showEntryPopup(d) {
       var val = d.sections[key];
       if (!val) return;
       var lbl = document.createElement('p');
-      lbl.style.cssText = 'margin:14px 0 3px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:#888;';
+      lbl.style.cssText = 'margin:20px 0 4px;font-size:16px;font-weight:700;color:#0b0c0c;border-bottom:2px solid #1d70b8;padding-bottom:4px;';
       lbl.textContent = key;
       var content = document.createElement('p');
-      content.style.cssText = 'margin:0;font-size:14px;color:#333;line-height:1.6;';
+      content.style.cssText = 'margin:0;font-size:19px;color:#0b0c0c;line-height:1.6;';
       content.textContent = val;
       el.appendChild(lbl);
       el.appendChild(content);
@@ -144,7 +160,7 @@ function showEntryPopup(d) {
     var a = document.createElement('a');
     a.href = d.link; a.target = '_blank'; a.rel = 'noopener noreferrer';
     a.textContent = 'Learn more \u2192';
-    a.style.cssText = 'display:inline-block;margin-top:16px;font-size:13px;color:#0070f3;';
+    a.style.cssText = 'display:inline-block;margin-top:20px;font-size:16px;color:#1d70b8;text-decoration:underline;font-weight:700;';
     el.appendChild(a);
   }
   document.getElementById('entry-popup').style.display = 'block';
@@ -165,42 +181,41 @@ loadRadar().catch(function(err) {
 });
 </script>
 
-<table>
-<tr>
-<td>
+<hr class="govuk-section-break">
+
+<div style="display:flex;gap:60px;flex-wrap:wrap;align-items:flex-start;">
+
+<div style="flex:1;min-width:280px;">
 
 <h3>What is the AI4Dev Radar?</h3>
 
-<p>
-The AI4Dev Radar provides a transparent view of the tools, practices, platforms and ways of working that are being explored, trialled and adopted across the Met Office engineering community.
-Each item on the radar is assigned to a lifecycle phase based on its current level of organisational understanding, evidence, adoption and support. The purpose of the radar is not to mandate technology choices, but to help teams understand what is being investigated, what is being proven in delivery, what is available for wider use, and what is no longer being pursued.
-We use five lifecycle phases based on the GDS delivery model:
-</p>
+<p>The AI4Dev Radar provides a transparent view of the tools, practices, platforms and ways of working that are being explored, trialled and adopted across the Met Office engineering community.</p>
+
+<p>Each item is assigned to a lifecycle phase based on its current level of organisational understanding, evidence, adoption and support. The purpose of the radar is not to mandate technology choices, but to help teams understand what is being investigated, what is being proven in delivery, what is available for wider use, and what is no longer being pursued.</p>
+
+<p>We use five lifecycle phases based on the GDS delivery model:</p>
 
 <ul>
-<li><strong>DISCOVERY</strong> &mdash; Items we are actively exploring to understand potential value, use cases, costs, risks and organisational fit. These are ideas, tools, capabilities or practices that show promise but require further research and discussion before investment decisions can be made. Discovery items may have been requested by teams, raised through the AI4Dev community, or identified through external research and industry trends.</li>
-<li><strong>ALPHA</strong> &mdash; Items undergoing initial experimentation and proof of concept activity. Alpha items are being evaluated by a small number of teams to determine whether they solve a real problem and deliver meaningful benefit. Evidence is still limited, risks are often not fully understood, and approaches may change significantly as learning is gathered.</li>
-<li><strong>BETA</strong> &mdash; Items that have demonstrated value in real-world delivery scenarios and are being trialled more widely. Beta items have moved beyond experimentation and are beginning to establish repeatable practices, guidance and support mechanisms. Benefits are becoming clearer, but further evidence, learning and refinement are still required before broad adoption is recommended.</li>
-<li><strong>LIVE</strong> &mdash; Items that have proven their value and are supported for wider use across the organisation. Live items have established use cases, demonstrated benefits, clear guidance and an agreed support model. Teams can adopt these with confidence, drawing on existing organisational knowledge, experience and best practice.</li>
-<li><strong>RETIRED</strong> &mdash; Items that are no longer being actively pursued or recommended. Retired items may have been superseded by better alternatives, failed to demonstrate sufficient value, presented unacceptable risks, or no longer align with organisational priorities. Existing usage may continue temporarily, but new adoption is not encouraged.</li>
+<li><strong>DISCOVER</strong> &mdash; Items we are actively exploring to understand potential value, use cases, costs, risks and organisational fit.</li>
+<li><strong>ALPHA</strong> &mdash; Items undergoing initial experimentation and proof of concept activity, evaluated by a small number of teams.</li>
+<li><strong>BETA</strong> &mdash; Items that have demonstrated value in real-world delivery and are being trialled more widely.</li>
+<li><strong>LIVE</strong> &mdash; Items proven in practice, supported for wider use across the organisation.</li>
+<li><strong>RETIRED</strong> &mdash; Items that are no longer being actively pursued or recommended.</li>
 </ul>
 
-<p>
-The radar is intended to support transparency, learning and collaboration across the engineering community. By making the status, evidence and direction of travel visible, we can reduce duplication of effort, share lessons learned, and help teams make informed decisions about where to invest their time and energy.  
-</p>
+<p>The radar supports transparency, learning and collaboration across the engineering community. By making the status, evidence and direction of travel visible, we can reduce duplication of effort and help teams make informed decisions about where to invest their time and energy.</p>
 
-</td><td>
+</div>
+
+<div style="flex:1;min-width:280px;border-left:4px solid #1d70b8;padding-left:30px;">
 
 <h3>What is the purpose?</h3>
 
-<p>
-The AI4Dev Radar provides a transparent view of the tools, practices, platforms and ways of working being explored across the Met Office engineering community. Its purpose is to help teams make informed decisions, learn from one another, and understand where the organisation is investing effort in agentic development and AI-enabled delivery.
-</p>  
-<p>
-The radar is not a list of approved technologies, nor is it intended to mandate technology choices. Instead, it provides visibility of what is being investigated, what is being trialled, what has demonstrated value in delivery, and what is now considered part of the standard engineering toolkit.
-</p>
-<p>
-By bringing this information together in one place, the radar helps to:
+<p>The AI4Dev Radar provides a transparent view of the tools, practices, platforms and ways of working being explored across the Met Office engineering community. Its purpose is to help teams make informed decisions, learn from one another, and understand where the organisation is investing effort in agentic development and AI-enabled delivery.</p>
+
+<p>The radar is not a list of approved technologies, nor is it intended to mandate technology choices. Instead, it provides visibility of what is being investigated, what is being trialled, what has demonstrated value in delivery, and what is now considered part of the standard engineering toolkit.</p>
+
+<p>By bringing this information together in one place, the radar helps to:</p>
 <ul>
 <li>Share lessons learned and practical experiences across teams.</li>
 <li>Reduce duplication of effort and repeated experimentation.</li>
@@ -209,34 +224,29 @@ By bringing this information together in one place, the radar helps to:
 <li>Create a common understanding of where the organisation is on its AI4Dev journey.</li>
 <li>Turn isolated pockets of success into reusable organisational capability.</li>
 </ul>
-The radar supports the wider AI4Dev mission of enabling teams to deliver more value, faster through agentic development by identifying what works, capturing evidence, removing barriers, and sharing successful approaches with the wider community.
-</p>
 
 <h3>How do we maintain it?</h3>
 
 <p>The AI4Dev Radar is maintained by the AI4Dev community and Evaluation Group on behalf of the wider engineering organisation.</p>
-<p>New entries can be proposed by any engineer, team or community member. Proposals may include tools, platforms, integrations, delivery practices, learning initiatives, governance approaches, or other capabilities relevant to AI-enabled software delivery.></p>
-<p>Items move through the lifecycle phases based on evidence gathered from experimentation and real-world usage:</p>
-<p><strong>Discovery → Alpha → Beta → Live → Retired</strong></p>
 
-<p>Movement between phases is informed by factors such as:</p>
-<ul>
-<li>Demonstrated delivery value.</li>
-<li>Evidence from delivery teams.</li>
-<li>User feedback and adoption experience.</li>
-<li>Security, legal and commercial considerations.</li>
-<li>Operational supportability.</li>
-<li>Strategic alignment with organisational objectives.</li>
-</ul>
+<p>New entries can be proposed by any engineer, team or community member. Items move through lifecycle phases based on evidence gathered from experimentation and real-world usage:</p>
+
+<p style="font-size:19px;font-weight:700;color:#0b0c0c;">Discover &rarr; Alpha &rarr; Beta &rarr; Live &rarr; Retired</p>
 
 <p>The radar depends on active participation from the engineering community. Teams are encouraged to share successes, challenges, lessons learned and recommendations so that knowledge can be reused across the organisation rather than remaining within individual projects or teams.</p>
-<p>Every radar entry includes its current status, supporting evidence, known risks, recommended audience and next steps, providing transparency into both the decision-making process and the direction of travel.</p>
-<p>Ultimately, the radar exists to help the engineering community learn faster together than any individual team can learn alone.</p>
 
-</p>
+</div>
 
-</td></tr>
-</table>
+</div>
+
+</div><!-- /.govuk-main-wrapper -->
+
+<footer class="govuk-footer">
+  <div class="govuk-footer__container">
+    <p>AI4Dev Radar &mdash; maintained by the AI4Dev community and Evaluation Group.</p>
+    <p>Built on the <a href="https://github.com/zalando/tech-radar">Zalando Tech Radar</a> open source project.</p>
+  </div>
+</footer>
 
 </body>
 </html>

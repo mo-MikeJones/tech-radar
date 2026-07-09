@@ -1,22 +1,215 @@
+/* ============================================
+   GOV.UK-inspired stylesheet for AI4Dev Radar
+   ============================================ */
+
+/* Base */
 body {
-  font-family: 'Source Sans Pro', arial, helvetica, sans-serif;
-  padding-bottom: 50px;
+  font-family: 'GDS Transport', 'Source Sans Pro', arial, helvetica, sans-serif;
+  font-size: 19px;
+  line-height: 1.5;
+  color: #0b0c0c;
+  padding: 0;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: #fff;
 }
+
+/* ---- Header ---- */
+.govuk-header {
+  background: #0b0c0c;
+  border-bottom: 10px solid #1d70b8;
+  padding: 10px 0;
+}
+.govuk-header__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 30px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.govuk-header__logotype {
+  color: #fff;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1;
+  margin-right: 4px;
+  letter-spacing: -1px;
+}
+.govuk-header__title {
+  color: #fff;
+  font-size: 24px;
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: -0.5px;
+}
+.govuk-header__title:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 4px;
+}
+.govuk-header__phase-tag {
+  display: inline-block;
+  background: #1d70b8;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 3px 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* ---- Phase banner ---- */
+.govuk-phase-banner {
+  border-bottom: 1px solid #b1b4b6;
+  padding: 8px 0;
+  background: #fff;
+}
+.govuk-phase-banner__content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 30px;
+  font-size: 16px;
+  color: #0b0c0c;
+}
+.govuk-phase-banner__tag {
+  display: inline-block;
+  background: #1d70b8;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 2px 8px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+.govuk-phase-banner a {
+  color: #1d70b8;
+}
+.govuk-phase-banner a:hover {
+  text-decoration-thickness: 3px;
+}
+
+/* ---- Main content wrapper ---- */
+.govuk-main-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 30px 60px;
+}
+
+/* ---- Typography ---- */
 h3 {
-  margin-top: 50px;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #0b0c0c;
+  margin: 40px 0 15px;
+  padding-top: 0;
+  border-bottom: 4px solid #1d70b8;
+  padding-bottom: 8px;
+}
+p {
+  font-size: 19px;
+  line-height: 1.6;
+  color: #0b0c0c;
+  margin: 0 0 20px;
 }
 li {
-  margin: 25px 50px 0 0;
+  font-size: 19px;
+  line-height: 1.5;
+  color: #0b0c0c;
+  margin: 0 0 12px;
 }
+strong {
+  font-weight: 700;
+}
+a {
+  color: #1d70b8;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+a:hover {
+  text-decoration-thickness: 3px;
+}
+a:focus {
+  outline: 3px solid #fd0;
+  outline-offset: 0;
+  background: #fd0;
+  box-shadow: 0 -2px #fd0, 0 4px #0b0c0c;
+  text-decoration: none;
+  color: #0b0c0c;
+}
+
+/* ---- Table / two-column layout ---- */
 table {
-  width: 1400px;
-  margin: 0 50px 0 50px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 30px;
+  box-sizing: border-box;
+  border-collapse: collapse;
 }
 td {
   width: 50%;
   vertical-align: top;
-  padding-right: 60px;
+  padding-right: 50px;
 }
+td:last-child {
+  padding-right: 0;
+  padding-left: 20px;
+  border-left: 1px solid #b1b4b6;
+}
+ul {
+  padding-left: 20px;
+  margin: 0 0 20px;
+}
+
+/* ---- Section divider ---- */
+.govuk-section-break {
+  border: 0;
+  border-top: 1px solid #b1b4b6;
+  margin: 40px 0;
+}
+
+/* ---- Footer ---- */
+.govuk-footer {
+  background: #f3f2f1;
+  border-top: 1px solid #b1b4b6;
+  padding: 30px 0;
+  margin-top: 60px;
+}
+.govuk-footer__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 30px;
+  font-size: 16px;
+  color: #505a5f;
+}
+.govuk-footer__container p {
+  font-size: 16px;
+  color: #505a5f;
+  margin: 0 0 5px;
+}
+.govuk-footer__container a {
+  color: #0b0c0c;
+}
+
+/* ---- Radar SVG ---- */
+#radar {
+  display: block;
+  margin: 0 auto;
+}
+
+/* ---- Popup: GDS-style (square corners, blue top border) ---- */
+#entry-popup > div {
+  border-radius: 0 !important;
+  border-top: 10px solid #1d70b8 !important;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.3) !important;
+}
+
+/* ---- Link/hover for radar SVG text ---- */
 .hover-underline {
   text-decoration: none;
 }
