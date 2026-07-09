@@ -3,9 +3,9 @@
 
 <head>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-<meta name="description" content="Zalando Tech Radar: a tool to visualize technology choices, inspire and support Engineering teams at Zalando to pick the best technologies for new projects">
+<meta name="description" content="AI Radar: a tool to visualize technology choices, inspire and support Engineering teams to pick the best technologies and practices">
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Zalando Tech Radar</title>
+<title>AI Radar</title>
 <link rel="shortcut icon" href="https://www.zalando.de/favicon.ico">
 
 <script src="https://d3js.org/d3.v7.min.js"></script>
@@ -92,7 +92,7 @@ async function loadRadar() {
 
   radar_visualization({
     repo_url: "https://github.com/zalando/tech-radar",
-    title: "Zalando Tech Radar",
+    title: "AI4Dev Radar",
     date: config.date,
     quadrants: config.quadrants.map(function(q) { return { name: q.name }; }),
     rings: [
@@ -169,39 +169,70 @@ loadRadar().catch(function(err) {
 <tr>
 <td>
 
-<h3>What is the Tech Radar?</h3>
+<h3>What is the AI4Dev Radar?</h3>
 
 <p>
-The Zalando Tech Radar is a list of technologies, complemented by an assessment result, called <em>ring assignment</em>. We use four rings with the following semantics:
+The AI4Dev Radar provides a transparent view of the tools, practices, platforms and ways of working that are being explored, trialled and adopted across the Met Office engineering community.
+Each item on the radar is assigned to a lifecycle phase based on its current level of organisational understanding, evidence, adoption and support. The purpose of the radar is not to mandate technology choices, but to help teams understand what is being investigated, what is being proven in delivery, what is available for wider use, and what is no longer being pursued.
+We use five lifecycle phases based on the GDS delivery model:
 </p>
 
 <ul>
-<li><strong>ADOPT</strong> &mdash; Technologies we have high confidence in to serve our purpose, also in large scale. Technologies with a usage culture in our Zalando production environment, low risk and recommended to be widely used.</li>
-<li><strong>TRIAL</strong> &mdash; Technologies that we have seen work with success in project work to solve a real problem; first serious usage experience that confirm benefits and can uncover limitations. TRIAL technologies are slightly more risky; some engineers in our organization walked this path and will share knowledge and experiences.</li>
-<li><strong>ASSESS</strong> &mdash; Technologies that are promising and have clear potential value-add for us; technologies worth to invest some research and prototyping efforts in to see if it has impact. ASSESS technologies have higher risks; they are often brand new and highly unproven in our organisation. You will find some engineers that have knowledge in the technology and promote it, you may even find teams that have started a prototyping effort.</li>
-<li><strong>HOLD</strong> &mdash; Technologies not recommended to be used for new projects. Technologies that we think are not (yet) worth to (further) invest in. HOLD technologies should not be used for new projects, but usually can be continued for existing projects.</li>
+<li><strong>DISCOVERY</strong> &mdash; Items we are actively exploring to understand potential value, use cases, costs, risks and organisational fit. These are ideas, tools, capabilities or practices that show promise but require further research and discussion before investment decisions can be made. Discovery items may have been requested by teams, raised through the AI4Dev community, or identified through external research and industry trends.</li>
+<li><strong>ALPHA</strong> &mdash; Items undergoing initial experimentation and proof of concept activity. Alpha items are being evaluated by a small number of teams to determine whether they solve a real problem and deliver meaningful benefit. Evidence is still limited, risks are often not fully understood, and approaches may change significantly as learning is gathered.</li>
+<li><strong>BETA</strong> &mdash; Items that have demonstrated value in real-world delivery scenarios and are being trialled more widely. Beta items have moved beyond experimentation and are beginning to establish repeatable practices, guidance and support mechanisms. Benefits are becoming clearer, but further evidence, learning and refinement are still required before broad adoption is recommended.</li>
+<li><strong>LIVE</strong> &mdash; Items that have proven their value and are supported for wider use across the organisation. Live items have established use cases, demonstrated benefits, clear guidance and an agreed support model. Teams can adopt these with confidence, drawing on existing organisational knowledge, experience and best practice.</li>
+<li><strong>RETIRED</strong> &mdash; Items that are no longer being actively pursued or recommended. Retired items may have been superseded by better alternatives, failed to demonstrate sufficient value, presented unacceptable risks, or no longer align with organisational priorities. Existing usage may continue temporarily, but new adoption is not encouraged.</li>
 </ul>
+
+<p>
+The radar is intended to support transparency, learning and collaboration across the engineering community. By making the status, evidence and direction of travel visible, we can reduce duplication of effort, share lessons learned, and help teams make informed decisions about where to invest their time and energy.  
+</p>
 
 </td><td>
 
 <h3>What is the purpose?</h3>
 
 <p>
-The Tech Radar is a tool to inspire and support Engineering teams at Zalando to pick the best technologies for new projects; it provides a platform to share knowledge and experience in technologies, to reflect on technology decisions and continuously evolve our technology landscape. Based on the <a href="https://www.thoughtworks.com/radar">pioneering work of ThoughtWorks</a>, our Tech Radar sets out the changes in technologies that are interesting in software development &mdash; changes that we think our engineering teams should pay attention to and use in their projects.
+The AI4Dev Radar provides a transparent view of the tools, practices, platforms and ways of working being explored across the Met Office engineering community. Its purpose is to help teams make informed decisions, learn from one another, and understand where the organisation is investing effort in agentic development and AI-enabled delivery.
+</p>  
+<p>
+The radar is not a list of approved technologies, nor is it intended to mandate technology choices. Instead, it provides visibility of what is being investigated, what is being trialled, what has demonstrated value in delivery, and what is now considered part of the standard engineering toolkit.
+</p>
+<p>
+By bringing this information together in one place, the radar helps to:
+<ul>
+<li>Share lessons learned and practical experiences across teams.</li>
+<li>Reduce duplication of effort and repeated experimentation.</li>
+<li>Provide visibility of emerging tools, platforms and practices.</li>
+<li>Support evidence-based technology and process decisions.</li>
+<li>Create a common understanding of where the organisation is on its AI4Dev journey.</li>
+<li>Turn isolated pockets of success into reusable organisational capability.</li>
+</ul>
+The radar supports the wider AI4Dev mission of enabling teams to deliver more value, faster through agentic development by identifying what works, capturing evidence, removing barriers, and sharing successful approaches with the wider community.
 </p>
 
 <h3>How do we maintain it?</h3>
 
-<p>
-The Tech Radar is maintained by our <em>Principal Engineers</em> &mdash; who facilitate and drive the technology selection discussions at Zalando across the Engineering Community. Assignment of technologies to rings is the outcome of ring change proposals, which are discussed and voted on. The Tech Radar is open for contribution for all Engineering teams at Zalando and depends on their active participation to share lessons learned, pitfalls, and contribute to good practices on using the technologies.<br/>
-</p>
+<p>The AI4Dev Radar is maintained by the AI4Dev community and Evaluation Group on behalf of the wider engineering organisation.</p>
+<p>New entries can be proposed by any engineer, team or community member. Proposals may include tools, platforms, integrations, delivery practices, learning initiatives, governance approaches, or other capabilities relevant to AI-enabled software delivery.></p>
+<p>Items move through the lifecycle phases based on evidence gathered from experimentation and real-world usage:</p>
+<p><strong>Discovery → Alpha → Beta → Live → Retired</strong></p>
 
-<p>
-Check out our <a href="https://engineering.zalando.com/tags/tech-radar.html">Engineering Blog</a> for more information on how we approach Technology Selection and use the Tech Radar at Zalando.
-</p>
+<p>Movement between phases is informed by factors such as:</p>
+<ul>
+<li>Demonstrated delivery value.</li>
+<li>Evidence from delivery teams.</li>
+<li>User feedback and adoption experience.</li>
+<li>Security, legal and commercial considerations.</li>
+<li>Operational supportability.</li>
+<li>Strategic alignment with organisational objectives.</li>
+</ul>
 
-<p>
-<em>BTW, if you would like to create your own Tech Radar &mdash; we have <a href="https://github.com/zalando/tech-radar">open sourced the code</a> to generate this visualization.</em>
+<p>The radar depends on active participation from the engineering community. Teams are encouraged to share successes, challenges, lessons learned and recommendations so that knowledge can be reused across the organisation rather than remaining within individual projects or teams.</p>
+<p>Every radar entry includes its current status, supporting evidence, known risks, recommended audience and next steps, providing transparency into both the decision-making process and the direction of travel.</p>
+<p>Ultimately, the radar exists to help the engineering community learn faster together than any individual team can learn alone.</p>
+
 </p>
 
 </td></tr>
