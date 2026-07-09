@@ -1,9 +1,9 @@
 {
   "date": "2026.05",
   "quadrants": [
-    { "name": "Development",                  "folder": "development" },
-    { "name": "Delivery & Quality",           "folder": "delivery-and-quality" },
+    { "name": "Governance",                   "folder": "governance" },
     { "name": "Learning & Ways of Working",   "folder": "learning-and-ways-of-working" },
-    { "name": "Platforms & Integrations",     "folder": "platforms-and-integrations" }
+    { "name": "Tools",                        "folder": "tools" },
+    { "name": "Integrations",                 "folder": "integrations" }
   ]
 }

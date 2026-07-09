@@ -1,10 +1,15 @@
 [
   "agent-design-patterns.md",
   "agentic-development-playbooks.md",
+  "ai-assisted-pull-request-reviews.md",
+  "ai-assisted-refactoring.md",
   "ai-augmented-team-structures.md",
+  "ai-generated-code-without-human-review.md",
+  "ai-generated-test-cases.md",
   "ai-learning-pathways.md",
   "ai-pair-programming-practices.md",
   "copilot-licence-training.md",
   "frontier-team-experiments.md",
+  "github-copilot-code-reviews.md",
   "prompt-libraries.md"
 ]
